@@ -24,7 +24,6 @@ class User:
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
 
-
     def to_dict(self):
         """
         returns dictionary of user object

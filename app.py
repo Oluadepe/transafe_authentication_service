@@ -3,11 +3,12 @@
 """
 from flask import Flask, request, jsonify, abort, make_response
 from flask_jwt_extended import JWTManager
-from utils import check_password, validate_password_format, validate_email, create_token
+from utils import (check_password,
+                   validate_password_format, validate_email,
+                   create_token)
 from db import Database as storage
 from model import User
 from os import getenv
-
 
 
 app = Flask(__name__)
@@ -31,12 +32,13 @@ def signup():
     hash user password and save credentials to database
     """
     # validate parameter length
+    msg = 'request parameters, must be 3'
     if len(request.get_json()) > 3:
         return jsonify({'status': 'error',
-                        'msg': 'too many request parameters, must be 3'}), 400
+                        'msg': 'too many ' + msg}), 400
     if len(request.get_json()) < 3:
         return jsonify({'status': 'error',
-                        'msg': 'not enough request parameters, must be 3'}), 400
+                        'msg': 'not enough ' + msg}), 400
     # retrieve user credentials
     user_id = request.json.get('id')
     email = request.json.get('email')
@@ -74,7 +76,7 @@ def signin():
     if not check_password(password, user.get('password')):
         abort(401)
     token = create_token(user.get('id'))
-    # checks for RememberMe 
+    # checks for RememberMe
     remember_me = request.json.get('rememberMe')
     if remember_me:
         if not isinstance(remember_me, bool):
